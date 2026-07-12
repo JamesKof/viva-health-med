@@ -46,6 +46,7 @@ interface Donation {
 const AdminPayments = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +65,7 @@ const AdminPayments = () => {
       if (error) throw error;
 
       if (data.success) {
+        setAdminPassword(password);
         setIsAuthenticated(true);
         toast({
           title: "Access Granted",
@@ -91,13 +93,12 @@ const AdminPayments = () => {
   const fetchDonations = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("donations")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("admin-list-donations", {
+        body: { password: adminPassword },
+      });
 
       if (error) throw error;
-      setDonations(data || []);
+      setDonations(data?.donations || []);
     } catch (error) {
       console.error("Error fetching donations:", error);
       toast({
