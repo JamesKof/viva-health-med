@@ -5,6 +5,7 @@ import surgeonPreparing from "@/assets/keta-outreach/surgeon-preparing.jpg";
 import ajumakoHero from "@/assets/blog/ajumako-hero.jpg";
 import safeSchoolHero from "@/assets/blog/safe-school-hero.jpg";
 import podoeHero from "@/assets/blog/podoe-hero.jpg";
+import temaFlyer from "@/assets/blog/tema-outreach-flyer.jpeg.asset.json";
 
 export interface BlogPost {
   slug: string;

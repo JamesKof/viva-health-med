@@ -16,12 +16,14 @@ const articleComponents: Record<string, React.ComponentType> = {};
 const AjumakoArticle = lazy(() => import("@/components/blog/AjumakoArticle").then(m => ({ default: m.AjumakoArticle })));
 const SafeSchoolArticle = lazy(() => import("@/components/blog/SafeSchoolArticle").then(m => ({ default: m.SafeSchoolArticle })));
 const PodoeArticle = lazy(() => import("@/components/blog/PodoeArticle").then(m => ({ default: m.PodoeArticle })));
+const TemaOutreachArticle = lazy(() => import("@/components/blog/TemaOutreachArticle").then(m => ({ default: m.TemaOutreachArticle })));
 
 // Map slugs to their article components
 const articleRegistry: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
   "ajumako-world-oral-health-day-outreach": AjumakoArticle,
   "safe-school-project-bullying-cyberbullying": SafeSchoolArticle,
   "podoe-community-health-outreach": PodoeArticle,
+  "free-medical-outreach-tema-naval-base": TemaOutreachArticle,
 };
 
 const BlogPost = () => {
