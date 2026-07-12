@@ -46,6 +46,7 @@ interface Donation {
 const AdminPayments = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
