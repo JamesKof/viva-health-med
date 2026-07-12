@@ -93,13 +93,12 @@ const AdminPayments = () => {
   const fetchDonations = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("donations")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("admin-list-donations", {
+        body: { password: adminPassword },
+      });
 
       if (error) throw error;
-      setDonations(data || []);
+      setDonations(data?.donations || []);
     } catch (error) {
       console.error("Error fetching donations:", error);
       toast({
