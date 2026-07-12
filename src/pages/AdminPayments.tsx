@@ -65,6 +65,7 @@ const AdminPayments = () => {
       if (error) throw error;
 
       if (data.success) {
+        setAdminPassword(password);
         setIsAuthenticated(true);
         toast({
           title: "Access Granted",
