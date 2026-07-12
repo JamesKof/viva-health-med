@@ -5,6 +5,7 @@ import surgeonPreparing from "@/assets/keta-outreach/surgeon-preparing.jpg";
 import ajumakoHero from "@/assets/blog/ajumako-hero.jpg";
 import safeSchoolHero from "@/assets/blog/safe-school-hero.jpg";
 import podoeHero from "@/assets/blog/podoe-hero.jpg";
+import temaFlyer from "@/assets/blog/tema-outreach-flyer.jpeg.asset.json";
 
 export interface BlogPost {
   slug: string;
@@ -20,6 +21,18 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "free-medical-outreach-tema-naval-base",
+    image: temaFlyer.url,
+    date: "Jul 12, 2026",
+    author: "Viva Health Media",
+    category: "Outreach",
+    title: "Free Medical Outreach for Tema Community at Tema Naval Base",
+    excerpt:
+      "Viva Health Medical Foundation, in partnership with the Eastern Naval Command and the Tema Youth Association, announces a Free Medical Outreach for the Tema community on 25th July 2026 at the Tema Naval Base, Junior Rates Mess.",
+    featured: true,
+    hasArticle: true,
+  },
+  {
     slug: "podoe-community-health-outreach",
     image: podoeHero,
     date: "Apr 3, 2026",
@@ -28,7 +41,7 @@ export const blogPosts: BlogPost[] = [
     title: "Podoe Community Benefits from Viva Health Medical Foundation Outreach",
     excerpt:
       "Viva Health Medical Foundation successfully conducted a community health outreach in Podoe, delivering free services across multiple health sectors to 514 individuals over an intensive 14-hour period.",
-    featured: true,
+    featured: false,
     hasArticle: true,
   },
   {
