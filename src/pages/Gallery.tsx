@@ -69,26 +69,9 @@ const Gallery = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="pt-24 pb-8 bg-primary">
+        <section className="pt-24 pb-8 bg-primary overflow-hidden">
           <div className="relative h-[50vh] overflow-hidden">
-            <div className="absolute inset-0 grid grid-cols-4 grid-rows-2 gap-1 opacity-50">
-              <div className="col-span-2 row-span-2">
-                <img src={surgeryInProgress} alt="Surgery" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-1 row-span-1">
-                <img src={doctorPatientCare} alt="Patient care" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-1 row-span-1">
-                <img src={teamBriefing} alt="Team" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-1 row-span-1">
-                <img src={nursePreparing} alt="Nurse" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-1 row-span-1">
-                <img src={volunteersCoordinating} alt="Volunteers" className="w-full h-full object-cover" />
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-primary/70 to-primary" />
+            <PageHeroBackground />
             <div className="absolute bottom-0 left-0 right-0 p-8">
               <div className="container mx-auto">
                 <PageHero>

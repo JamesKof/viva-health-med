@@ -42,12 +42,9 @@ const BlogPost = () => {
         <Navbar />
 
         {/* Hero */}
-        <section className="pt-24 bg-primary">
+        <section className="pt-24 bg-primary overflow-hidden">
           <div className="relative min-h-[50vh] flex items-end">
-            <div className="absolute inset-0">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover opacity-30" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-primary/80 to-primary" />
-            </div>
+            <PageHeroBackground />
             <div className="container mx-auto px-4 relative z-10 pb-12">
               <Link
                 to="/blog"
