@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Calendar, User, ArrowRight, Mail, BookOpen } from "lucide-react";
 import { FadeInUp, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
@@ -30,12 +31,9 @@ const Blog = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="pt-24 bg-primary">
+        <section className="pt-24 bg-primary overflow-hidden">
           <div className="relative min-h-[60vh] flex items-end">
-            <div className="absolute inset-0">
-              <img src={featuredPost.image} alt={featuredPost.title} className="w-full h-full object-cover opacity-40" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-primary/80 to-primary" />
-            </div>
+            <PageHeroBackground />
             <div className="container mx-auto px-4 relative z-10 pb-16">
               <PageHero className="max-w-3xl">
                 <div className="flex items-center gap-4 mb-4">

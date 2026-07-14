@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -67,15 +68,8 @@ const WhatWeDo = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="relative min-h-[60vh] flex items-center bg-primary">
-          <div className="absolute inset-0">
-            <img
-              src={medicalTeamAction}
-              alt="Medical team in action"
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/70" />
-          </div>
+        <section className="relative min-h-[60vh] flex items-center bg-primary overflow-hidden">
+          <PageHeroBackground />
 
           <div className="container mx-auto px-4 relative z-10 py-32">
             <PageHero className="max-w-2xl">

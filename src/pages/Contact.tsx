@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone, Send, Facebook, Instagram } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -60,15 +61,8 @@ const Contact = () => {
         <StickySubNav />
 
         {/* Hero Section with Green Background */}
-        <section className="relative min-h-[50vh] flex items-center bg-primary">
-          <div className="absolute inset-0">
-            <img
-              src={teamBriefing}
-              alt="Viva Health team"
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/70" />
-          </div>
+        <section className="relative min-h-[50vh] flex items-center bg-primary overflow-hidden">
+          <PageHeroBackground />
 
           <div className="container mx-auto px-4 relative z-10 py-32">
             <PageHero className="max-w-2xl">

@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DonationStats } from "@/components/DonationStats";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { MemberOnboardingForm } from "@/components/MemberOnboardingForm";
 import { Link } from "react-router-dom";
@@ -70,15 +71,8 @@ const Volunteer = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="relative min-h-[70vh] flex items-center bg-primary">
-          <div className="absolute inset-0">
-            <img
-              src={volunteersCoordinating}
-              alt="Volunteers coordinating"
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/70" />
-          </div>
+        <section className="relative min-h-[70vh] flex items-center bg-primary overflow-hidden">
+          <PageHeroBackground />
 
           <div className="container mx-auto px-4 relative z-10 py-32">
             <PageHero className="max-w-2xl">

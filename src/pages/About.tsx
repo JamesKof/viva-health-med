@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Heart, Target, Eye, Users, Sparkles, Shield, HandHeart } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -51,15 +52,8 @@ const About = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="relative min-h-[70vh] flex items-center bg-primary">
-          <div className="absolute inset-0">
-            <img
-              src={heroCommunity}
-              alt="Viva Health community outreach"
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/70" />
-          </div>
+        <section className="relative min-h-[70vh] flex items-center bg-primary overflow-hidden">
+          <PageHeroBackground />
 
           <div className="container mx-auto px-4 relative z-10 py-32">
             <PageHero className="max-w-2xl">

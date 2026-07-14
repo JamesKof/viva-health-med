@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { FadeInUp } from "@/components/AnimatedSection";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { Cookie, Settings, BarChart, Shield, Clock, ToggleRight } from "lucide-react";
 
 const CookiesPolicy = () => {
@@ -52,8 +53,8 @@ const CookiesPolicy = () => {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 bg-primary">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary" />
+        <section className="relative pt-32 pb-20 bg-primary overflow-hidden">
+          <PageHeroBackground />
           <div className="container mx-auto px-4 relative z-10">
             <FadeInUp>
               <div className="max-w-3xl mx-auto text-center text-primary-foreground">
