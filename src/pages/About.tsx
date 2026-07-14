@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Heart, Target, Eye, Users, Sparkles, Shield, HandHeart } from "lucide-react";
 import { Link } from "react-router-dom";

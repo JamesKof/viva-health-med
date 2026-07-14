@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DonationStats } from "@/components/DonationStats";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { MemberOnboardingForm } from "@/components/MemberOnboardingForm";
 import { Link } from "react-router-dom";

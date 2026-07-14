@@ -3,6 +3,7 @@ import { Heart, CreditCard, Smartphone, Building2, Copy, Check, Loader2, Users, 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone, Send, Facebook, Instagram } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
