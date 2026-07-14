@@ -64,15 +64,8 @@ const Events = () => {
         />
         <Navbar />
         <StickySubNav />
-        <section className="relative min-h-[50vh] flex items-center bg-primary">
-          <div className="absolute inset-0">
-            <img
-              src={teamBriefing}
-              alt="Team planning outreach"
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/70" />
-          </div>
+        <section className="relative min-h-[50vh] flex items-center bg-primary overflow-hidden">
+          <PageHeroBackground />
 
           <div className="container mx-auto px-4 relative z-10 py-32">
             <PageHero className="max-w-2xl">
