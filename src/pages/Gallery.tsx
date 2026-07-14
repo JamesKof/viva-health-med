@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { X, Camera, MapPin, Calendar } from "lucide-react";
 import { FadeInUp } from "@/components/AnimatedSection";

@@ -10,7 +10,6 @@ import type { Tables } from "@/integrations/supabase/types";
 import { Link } from "react-router-dom";
 import { FadeInUp, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
 import { PageTransition, PageHero } from "@/components/PageTransition";
-import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import teamBriefing from "@/assets/keta-outreach/team-briefing.jpg";
 import volunteersCoordinating from "@/assets/keta-outreach/volunteers-coordinating.jpg";
 

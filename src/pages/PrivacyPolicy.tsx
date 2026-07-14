@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { FadeInUp } from "@/components/AnimatedSection";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { Shield, Lock, Eye, UserCheck, Database, Bell } from "lucide-react";
 
 const PrivacyPolicy = () => {

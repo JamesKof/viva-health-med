@@ -12,7 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { KetaOutreachGallery } from "@/components/KetaOutreachGallery";
 import { PageTransition, PageHero } from "@/components/PageTransition";
-import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import surgeryInProgress from "@/assets/keta-outreach/surgery-in-progress.jpg";
 
 const BANK_DETAILS = {

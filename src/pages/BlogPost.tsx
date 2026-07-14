@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { PageTransition } from "@/components/PageTransition";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";

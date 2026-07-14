@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { StickySubNav } from "@/components/StickySubNav";
 import { Calendar, User, ArrowRight, Mail, BookOpen } from "lucide-react";
 import { FadeInUp, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
