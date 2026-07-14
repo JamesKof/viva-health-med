@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { FadeInUp, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
 import { PageTransition, PageHero } from "@/components/PageTransition";
+import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import volunteersCoordinating from "@/assets/keta-outreach/volunteers-coordinating.jpg";
 import teamBriefing from "@/assets/keta-outreach/team-briefing.jpg";
 

@@ -6,6 +6,7 @@ import { Heart, Target, Eye, Users, Sparkles, Shield, HandHeart } from "lucide-r
 import { Link } from "react-router-dom";
 import { FadeInUp, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
 import { PageTransition, PageHero } from "@/components/PageTransition";
+import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import heroCommunity from "@/assets/hero-community.jpeg";
 import surgeryInProgress from "@/assets/keta-outreach/surgery-in-progress.jpg";
 import medicalTeamAction from "@/assets/keta-outreach/medical-team-action.jpg";

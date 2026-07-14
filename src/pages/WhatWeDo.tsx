@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { FadeInUp, SlideInLeft, SlideInRight } from "@/components/AnimatedSection";
 import { PageTransition, PageHero } from "@/components/PageTransition";
+import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import medicalTeamAction from "@/assets/keta-outreach/medical-team-action.jpg";
 import surgeryInProgress from "@/assets/keta-outreach/surgery-in-progress.jpg";
 import doctorPatientCare from "@/assets/keta-outreach/doctor-patient-care.jpg";

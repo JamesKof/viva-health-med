@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { FadeInUp, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/AnimatedSection";
 import { PageTransition, PageHero } from "@/components/PageTransition";
+import vivaSmileAsset from "@/assets/vivasmile.jpeg.asset.json";
 import teamBriefing from "@/assets/keta-outreach/team-briefing.jpg";
 
 const socialLinks = [
