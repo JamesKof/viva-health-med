@@ -47,7 +47,7 @@ export const Footer = () => {
               <img
                 src={logo}
                 alt="Viva Health Medical Foundation Logo"
-                className="h-12 w-auto object-contain bg-background rounded-lg p-1"
+                className="h-14 w-auto object-contain"
               />
               <span className="font-bold text-xl">Viva Health</span>
             </div>
