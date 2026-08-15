@@ -92,6 +92,13 @@ const Gallery = () => {
         <section className="py-6 border-b border-border sticky top-16 bg-background/95 backdrop-blur-sm z-20">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="/videos"
+                className="px-5 py-2 rounded-full text-sm font-medium bg-secondary text-secondary-foreground hover:bg-primary/10 transition-colors"
+              >
+                Videos
+              </a>
+
               {categories.map((category) => (
                 <button
                   key={category}
