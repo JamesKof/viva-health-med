@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Info, Briefcase, Calendar, Image, BookOpen, Mail, Heart, Users } from "lucide-react";
@@ -15,18 +15,9 @@ const navItems = [
 ];
 
 export const StickySubNav = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show after scrolling past 400px
-      setIsVisible(window.scrollY > 400);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <AnimatePresence>
