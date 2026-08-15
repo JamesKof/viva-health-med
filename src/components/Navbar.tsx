@@ -32,7 +32,15 @@ const navItems = [
       { label: "Publicity", to: "/volunteer" },
     ],
   },
-  { label: "Gallery", to: "/gallery" },
+  {
+    label: "Gallery",
+    to: "/gallery",
+    children: [
+      { label: "Photos", to: "/gallery" },
+      { label: "Videos", to: "/videos" },
+    ],
+  },
+
   { label: "Blog", to: "/blog" },
   { label: "Contact", to: "/contact" },
 ];

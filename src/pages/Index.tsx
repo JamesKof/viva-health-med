@@ -7,6 +7,8 @@ import { ServicesSection } from "@/components/ServicesSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VolunteerSection } from "@/components/VolunteerSection";
 import { BlogSection } from "@/components/BlogSection";
+import { FeaturedVideos } from "@/components/FeaturedVideos";
+
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
 import { StickySubNav } from "@/components/StickySubNav";
@@ -31,6 +33,8 @@ const Index = () => {
         <TestimonialsSection />
         <VolunteerSection />
         <BlogSection />
+        <FeaturedVideos />
+
         
         {/* Newsletter Section */}
         <section className="py-20 bg-background">
