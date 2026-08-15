@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
 import { videos, thumbnailUrl } from "@/data/videos";
+import { LazyYouTube } from "@/components/LazyYouTube";
 import { FadeInUp } from "@/components/AnimatedSection";
+
 
 export const FeaturedVideos = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
@@ -31,16 +33,10 @@ export const FeaturedVideos = () => {
             <FadeInUp key={video.id} delay={i * 0.1}>
               <article className="rounded-2xl overflow-hidden bg-card shadow-soft card-lift h-full flex flex-col">
                 {activeVideo === video.id ? (
-                  <div className="aspect-video">
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0`}
-                      title={video.title}
-                      className="w-full h-full"
-                      loading="lazy"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                  <div className="aspect-video bg-muted">
+                    <LazyYouTube id={video.id} title={video.title} autoplay />
                   </div>
+
                 ) : (
                   <button
                     type="button"

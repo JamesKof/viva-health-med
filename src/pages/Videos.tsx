@@ -1,24 +1,124 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Play, X, Youtube, Camera } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageSEO } from "@/components/PageSEO";
+import { LazyYouTube } from "@/components/LazyYouTube";
 import { PageHeroBackground } from "@/components/PageHeroBackground";
 import { PageTransition, PageHero } from "@/components/PageTransition";
 import { videos, videoCategories, thumbnailUrl, CHANNEL_URL } from "@/data/videos";
+import type { VideoItem } from "@/data/videos";
+
+const MONTHS = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december",
+];
+
+/** Converts "December 2025" to an ISO date usable by schema.org uploadDate. */
+const toIsoDate = (label: string) => {
+  const [month, year] = label.toLowerCase().split(" ");
+  const index = MONTHS.indexOf(month);
+  if (index < 0 || !year) return undefined;
+  return `${year}-${String(index + 1).padStart(2, "0")}-01`;
+};
+
+const videoSchema = (video: VideoItem) => ({
+  "@type": "VideoObject",
+  name: video.title,
+  description: `${video.category} — ${video.title} by Viva Health Medical Foundation.`,
+  thumbnailUrl: [thumbnailUrl(video.id)],
+  uploadDate: toIsoDate(video.date),
+  contentUrl: `https://www.youtube.com/watch?v=${video.id}`,
+  embedUrl: `https://www.youtube-nocookie.com/embed/${video.id}`,
+  publisher: {
+    "@type": "Organization",
+    name: "Viva Health Medical Foundation",
+  },
+});
 
 const Videos = () => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [playing, setPlaying] = useState<(typeof videos)[0] | null>(null);
+  const [playing, setPlaying] = useState<VideoItem | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const lastFocused = useRef<HTMLElement | null>(null);
 
-  const filtered =
-    activeCategory === "All"
-      ? videos
-      : videos.filter((v) => v.category === activeCategory);
+  const filtered = useMemo(
+    () =>
+      activeCategory === "All"
+        ? videos
+        : videos.filter((v) => v.category === activeCategory),
+    [activeCategory]
+  );
 
   const featured = videos[0];
+
+  const jsonLd = useMemo(
+    () => [
+      {
+        "@context": "https://schema.org",
+        ...videoSchema(featured),
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `Viva Health Medical Foundation videos — ${activeCategory}`,
+        itemListElement: filtered.map((video, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: videoSchema(video),
+        })),
+      },
+    ],
+    [featured, filtered, activeCategory]
+  );
+
+  // Keyboard controls + focus trapping for the lightbox
+  useEffect(() => {
+    if (!playing) return;
+
+    lastFocused.current = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setPlaying(null);
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button, [href], iframe, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || !dialogRef.current?.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+      lastFocused.current?.focus?.();
+    };
+  }, [playing]);
 
   return (
     <PageTransition>
@@ -26,6 +126,10 @@ const Videos = () => {
         <PageSEO
           title="Videos | Viva Health Medical Foundation"
           description="Watch outreach films, Keta surgery documentaries and volunteer stories from Viva Health Medical Foundation in Ghana."
+          canonical="https://vivahealthmedfoundation.org/videos"
+          image={thumbnailUrl(featured.id)}
+          type="video.other"
+          jsonLd={jsonLd}
         />
         <Navbar />
 
@@ -84,14 +188,7 @@ const Videos = () => {
             <div className="grid lg:grid-cols-3 gap-8 items-center">
               <div className="lg:col-span-2 rounded-2xl overflow-hidden shadow-lifted bg-card">
                 <div className="aspect-video">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${featured.id}?rel=0`}
-                    title={featured.title}
-                    className="w-full h-full"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  <LazyYouTube id={featured.id} title={featured.title} />
                 </div>
               </div>
               <div>
@@ -182,30 +279,33 @@ const Videos = () => {
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/90 backdrop-blur-sm animate-fade-in p-4"
             onClick={() => setPlaying(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={playing.title}
           >
-            <button
-              className="absolute top-6 right-6 p-2 rounded-full bg-background/10 text-background hover:bg-background/20 transition-colors"
-              onClick={() => setPlaying(null)}
-              aria-label="Close video"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div
-              className="w-full max-w-5xl animate-scale-in"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="aspect-video rounded-2xl overflow-hidden shadow-lifted">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${playing.id}?autoplay=1&rel=0`}
-                  title={playing.title}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+            <div ref={dialogRef} className="contents">
+              <button
+                ref={closeButtonRef}
+                className="absolute top-6 right-6 p-2 rounded-full bg-background/10 text-background hover:bg-background/20 transition-colors"
+                onClick={() => setPlaying(null)}
+                aria-label="Close video"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div
+                className="w-full max-w-5xl animate-scale-in"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="aspect-video rounded-2xl overflow-hidden shadow-lifted bg-muted">
+                  <LazyYouTube id={playing.id} title={playing.title} autoplay />
+                </div>
+                <h3 className="mt-4 text-center text-lg font-semibold text-background">
+                  {playing.title}
+                </h3>
+                <p className="mt-1 text-center text-xs text-background/70">
+                  Press Esc to close
+                </p>
               </div>
-              <h3 className="mt-4 text-center text-lg font-semibold text-background">
-                {playing.title}
-              </h3>
             </div>
           </div>
         )}
