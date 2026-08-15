@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
 import { videos, thumbnailUrl } from "@/data/videos";
+import { LazyYouTube } from "@/components/LazyYouTube";
 import { FadeInUp } from "@/components/AnimatedSection";
+
 
 export const FeaturedVideos = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
