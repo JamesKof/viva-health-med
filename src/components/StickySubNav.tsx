@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Info, Briefcase, Calendar, Image, BookOpen, Mail, Heart, Users } from "lucide-react";
@@ -14,10 +14,40 @@ const navItems = [
   { label: "Contact", to: "/contact", icon: Mail },
 ];
 
+const SHOW_AFTER = 400;
+
 export const StickySubNav = () => {
-  const [isVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const lastScrollY = useRef(0);
   const location = useLocation();
 
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const current = window.scrollY;
+      const delta = current - lastScrollY.current;
+
+      if (current < SHOW_AFTER) {
+        setIsVisible(false);
+      } else if (delta > 6) {
+        // scrolling down → hide
+        setIsVisible(false);
+      } else if (delta < -6) {
+        // scrolling up → reveal
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = current;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsVisible(false);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence>
