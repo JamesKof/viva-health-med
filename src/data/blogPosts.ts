@@ -6,6 +6,7 @@ import ajumakoHero from "@/assets/blog/ajumako-hero.jpg";
 import safeSchoolHero from "@/assets/blog/safe-school-hero.jpg";
 import podoeHero from "@/assets/blog/podoe-hero.jpg";
 import temaFlyer from "@/assets/blog/tema-outreach-flyer.jpeg.asset.json";
+import wusutaCommunity from "@/assets/blog/wusuta-community.jpg.asset.json";
 
 export interface BlogPost {
   slug: string;
@@ -21,6 +22,18 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "free-healthcare-outreach-wusuta",
+    image: wusutaCommunity.url,
+    date: "Sep 26, 2026",
+    author: "Viva Health Media",
+    category: "Outreach",
+    title: "Viva Health Brings Free Healthcare Services to Wusuta",
+    excerpt:
+      "Nearly 1,000 residents received free screenings, consultations, dental care and medication during a major community health outreach in Wusuta, Volta Region.",
+    featured: true,
+    hasArticle: true,
+  },
+  {
     slug: "free-medical-outreach-tema-naval-base",
     image: temaFlyer.url,
     date: "Jul 12, 2026",
@@ -29,7 +42,7 @@ export const blogPosts: BlogPost[] = [
     title: "Free Medical Outreach for Tema Community at Tema Naval Base",
     excerpt:
       "Viva Health Medical Foundation, in partnership with the Eastern Naval Command and the Tema Youth Association, announces a Free Medical Outreach for the Tema community on 25th July 2026 at the Tema Naval Base, Junior Rates Mess.",
-    featured: true,
+    featured: false,
     hasArticle: true,
   },
   {
