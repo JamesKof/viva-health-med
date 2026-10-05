@@ -62,18 +62,18 @@ export const WusutaOutreachArticle = () => (
       caption="The outreach team prepared medication and supplies for beneficiaries."
     />
 
-    <h2>Approximately 1,000 People Reached</h2>
+    <h2>429 People Reached</h2>
 
     <p>
-      Approximately <strong>1,000 people</strong> benefited from the exercise, reflecting strong
+      A total of <strong>429 people</strong> benefited from the exercise, reflecting strong
       community participation. Those reached included:
     </p>
 
     <ul>
-      <li>More than 250 men and 200 women</li>
-      <li>Over 40 elderly people, including residents using mobility aids and wheelchairs</li>
-      <li>More than 100 children</li>
-      <li>170 adolescents reached through menstrual hygiene education and support</li>
+      <li>200 men</li>
+      <li>112 women</li>
+      <li>37 children</li>
+      <li>80 adolescents reached through menstrual hygiene education and support</li>
     </ul>
 
     <p>

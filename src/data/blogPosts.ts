@@ -29,7 +29,7 @@ export const blogPosts: BlogPost[] = [
     category: "Outreach",
     title: "Viva Health Brings Free Healthcare Services to Wusuta",
     excerpt:
-      "Nearly 1,000 residents received free screenings, consultations, dental care and medication during a major community health outreach in Wusuta, Volta Region.",
+      "429 residents received free screenings, consultations, dental care and medication during a community health outreach in Wusuta, Volta Region.",
     featured: true,
     hasArticle: true,
   },
