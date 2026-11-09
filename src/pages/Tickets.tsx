@@ -17,6 +17,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import ticketFlyer from "@/assets/events/ticket-categories.jpeg.asset.json";
 
+const TEST_TIER = { id: "test", name: "Test Ticket", price: 1, quote: "For testing payments only.", seats: "Testing",
+  perks: ["Used to test Hubtel payments", "Not a real seat"], accent: "from-emerald-600 to-emerald-900" } as const;
+
 export const TIERS = [
   { id: "supporter", name: "Supporter", price: 500, quote: "I want to be part of the Impact.", seats: "1 Seat",
     perks: ["1 Seat at the dinner", "Dinner & entertainment", "Recognition as a Foundation Supporter"], accent: "from-rose-600 to-rose-900" },
