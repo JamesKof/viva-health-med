@@ -99,7 +99,7 @@ export const AnniversaryPopup = () => {
               </div>
 
               <div className="p-4 grid grid-cols-2 gap-2 border-t border-border">
-                <Link to="/donate" onClick={close}
+                <Link to="/tickets" onClick={close}
                   className="flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground font-semibold py-2.5 text-sm hover:opacity-90 transition-opacity">
                   <Ticket className="w-4 h-4" /> Get Tickets
                 </Link>

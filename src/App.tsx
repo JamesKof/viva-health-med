@@ -15,6 +15,7 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Events from "./pages/Events";
 import Donate from "./pages/Donate";
+import Tickets from "./pages/Tickets";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiesPolicy from "./pages/CookiesPolicy";
 import AdminPayments from "./pages/AdminPayments";
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/donate" element={<Donate />} />
+          <Route path="/tickets" element={<Tickets />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/cookies-policy" element={<CookiesPolicy />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
