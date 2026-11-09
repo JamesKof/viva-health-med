@@ -111,7 +111,7 @@ const Tickets = () => {
     }
     setLoading(true);
     try {
-      const clientReference = `ticket_${crypto.randomUUID()}`;
+      const clientReference = `ticket_${crypto.randomUUID().replace(/-/g, "").slice(0, 24)}`;
       const { data, error } = await supabase.functions.invoke("hubtel-initiate", {
         body: {
           totalAmount: total, clientReference, email: parsed.data.email, donorName: parsed.data.name, phone: parsed.data.phone,
