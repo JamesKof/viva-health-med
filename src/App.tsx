@@ -21,6 +21,7 @@ import AdminPayments from "./pages/AdminPayments";
 import BlogPost from "./pages/BlogPost";
 import CookieConsent from "./components/CookieConsent";
 import { FloatingButtons } from "./components/FloatingButtons";
+import { AnniversaryPopup } from "./components/AnniversaryPopup";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
         </Routes>
         <CookieConsent />
         <FloatingButtons />
+        <AnniversaryPopup />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
