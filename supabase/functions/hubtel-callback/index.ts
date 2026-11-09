@@ -89,6 +89,7 @@ Deno.serve(async (req) => {
       }
 
       console.log(`Donation ${clientReference} marked as paid`);
+      await supabase.from("ticket_registrations").update({ payment_status: "paid" }).eq("payment_reference", clientReference);
 
       // Send thank you email if Resend is configured
       if (resendApiKey && updatedDonation) {
@@ -217,6 +218,7 @@ Deno.serve(async (req) => {
       if (updateError) {
         console.error("Failed to update donation status:", updateError);
       }
+      await supabase.from("ticket_registrations").update({ payment_status: "failed" }).eq("payment_reference", clientReference);
     }
 
     // Return success response to Hubtel
