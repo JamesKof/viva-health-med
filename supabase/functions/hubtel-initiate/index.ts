@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { ticketAccessToken } from "../_shared/ticket-access.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,7 +44,10 @@ Deno.serve(async (req) => {
 
     const body = await req.json();
     let { totalAmount, description } = body;
-    const { clientReference, email, donorName, phone, ticket } = body;
+    const { clientReference, email, donorName, phone, ticket, returnOrigin } = body;
+    if (typeof clientReference !== "string" || !/^[a-zA-Z0-9_-]{1,100}$/.test(clientReference)) {
+      return new Response(JSON.stringify({ error: "Invalid payment reference" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     const TIERS: Record<string, { price: number; label: string }> = {
       test: { price: 1, label: "Test Ticket" },
@@ -124,8 +128,12 @@ Deno.serve(async (req) => {
     // Prepare Hubtel API request
     const callbackUrl = `${supabaseUrl}/functions/v1/hubtel-callback`;
     const page = ticketRow ? "tickets" : "donate";
-    const returnUrl = `https://vivahealthmedfoundation.org/${page}?payment=success`;
-    const cancellationUrl = `https://vivahealthmedfoundation.org/${page}?payment=cancelled`;
+    const allowedOrigins = ["https://vivahealthmedfoundation.org", "https://viva-heal-renewal.lovable.app", "https://id-preview--d658694a-05d7-4618-a760-d907838b398d.lovable.app"];
+    const origin = allowedOrigins.includes(returnOrigin) ? returnOrigin : allowedOrigins[0];
+    const accessToken = ticketRow ? await ticketAccessToken(clientReference, hubtelApiKey) : undefined;
+    const receiptQuery = accessToken ? `&reference=${encodeURIComponent(clientReference)}&access=${accessToken}${ticket?.tier === "test" ? "&test=1" : ""}` : "";
+    const returnUrl = `${origin}/${page}?payment=success${receiptQuery}`;
+    const cancellationUrl = `${origin}/${page}?payment=cancelled${receiptQuery}`;
 
     const hubtelPayload = {
       totalAmount,
@@ -137,13 +145,13 @@ Deno.serve(async (req) => {
       clientReference,
     };
 
-    console.log("Calling Hubtel API with payload:", hubtelPayload);
+    console.log("Calling Hubtel API for reference:", clientReference);
 
     // Log initiate request
     await supabase.from("payment_logs").insert({
       payment_reference: clientReference,
       log_type: "initiate_request",
-      request_data: hubtelPayload,
+      request_data: { ...hubtelPayload, returnUrl: `${origin}/${page}?payment=success`, cancellationUrl: `${origin}/${page}?payment=cancelled` },
     });
 
     // Create Basic Auth header
@@ -193,6 +201,7 @@ Deno.serve(async (req) => {
       checkoutUrl: hubtelResult.data?.checkoutUrl,
       checkoutId: hubtelResult.data?.checkoutId,
       clientReference,
+      accessToken,
     }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

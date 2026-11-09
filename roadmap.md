@@ -1,0 +1,3 @@
+- [ ] Simplify GH₵1 test access and retain the original test link.
+- [ ] Confirm payment before offering a PDF ticket with the amount paid.
+- [ ] Verify test access, payment handoff, and download; note real-payment limits.
