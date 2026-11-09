@@ -21,7 +21,14 @@ const navItems = [
       { label: "Eye Screening", to: "/what-we-do" },
     ],
   },
-  { label: "Events", to: "/events" },
+  {
+    label: "Events",
+    to: "/events",
+    children: [
+      { label: "All Events", to: "/events" },
+      { label: "5th Anniversary Tickets", to: "/tickets" },
+    ],
+  },
   {
     label: "Get Involved",
     to: "/volunteer",

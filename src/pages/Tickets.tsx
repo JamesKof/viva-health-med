@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { trackEvent } from "@/hooks/useAnalytics";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import ticketFlyer from "@/assets/events/ticket-categories.jpeg.asset.json";
 
 export const TIERS = [
@@ -42,6 +42,7 @@ const Tickets = () => {
   const [params] = useSearchParams();
   const status = params.get("payment");
   const { toast } = useToast();
+  const { trackEvent } = useAnalytics();
   const [tier, setTier] = useState<string>("supporter");
   const [qty, setQty] = useState(1);
   const [custom, setCustom] = useState("");
