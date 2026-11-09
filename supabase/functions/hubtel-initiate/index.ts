@@ -46,6 +46,7 @@ Deno.serve(async (req) => {
     const { clientReference, email, donorName, phone, ticket } = body;
 
     const TIERS: Record<string, { price: number; label: string }> = {
+      test: { price: 1, label: "Test Ticket" },
       supporter: { price: 500, label: "Supporter" },
       champion: { price: 1000, label: "Champion" },
       impact_maker: { price: 2500, label: "Impact Maker" },
