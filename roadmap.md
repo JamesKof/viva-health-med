@@ -1,0 +1,3 @@
+- [x] Simplify GH₵1 test access and retain the original test link.
+- [x] Confirm payment before offering a PDF ticket with the amount paid.
+- [x] Verify test access, real GH₵1 Hubtel initiation and pending status, and simulated paid PDF download on desktop/mobile; no real payment completed.

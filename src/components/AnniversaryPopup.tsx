@@ -18,12 +18,13 @@ export const AnniversaryPopup = () => {
   const [slide, setSlide] = useState(0);
   const [left, setLeft] = useState(DURATION);
   const { pathname } = useLocation();
+  const isTicketPage = pathname === "/tickets" || pathname === "/test-ticket";
 
   useEffect(() => {
-    if (pathname.startsWith("/admin") || sessionStorage.getItem(KEY)) return;
+    if (pathname.startsWith("/admin") || isTicketPage || sessionStorage.getItem(KEY)) { setOpen(false); return; }
     const t = setTimeout(() => setOpen(true), 1000);
     return () => clearTimeout(t);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname, isTicketPage]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -113,7 +114,7 @@ export const AnniversaryPopup = () => {
         )}
       </AnimatePresence>
 
-      {!open && !pathname.startsWith("/admin") && (
+      {!open && !pathname.startsWith("/admin") && !isTicketPage && (
         <motion.button onClick={reopen} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
           className="fixed bottom-6 left-4 z-40 flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2.5 text-sm font-semibold shadow-lg hover:scale-105 transition-transform">
           <PartyPopper className="w-4 h-4" /> 5th Anniversary Tickets

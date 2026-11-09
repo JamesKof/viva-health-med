@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Ticket, Check, Loader2, CheckCircle2, XCircle, PartyPopper } from "lucide-react";
+import { Ticket, Check, Loader2, CheckCircle2, XCircle, PartyPopper, Download, FlaskConical } from "lucide-react";
 import { z } from "zod";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -16,8 +16,10 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import ticketFlyer from "@/assets/events/ticket-categories.jpeg.asset.json";
+import { createTicketPdf, downloadTicket, type PaidTicket } from "@/lib/ticket-pdf";
+import { isTestTicketPage, TEST_TICKET_PRICE } from "@/lib/ticket-pricing";
 
-const TEST_TIER = { id: "test", name: "Test Ticket", price: 1, quote: "For testing payments only.", seats: "Testing",
+const TEST_TIER = { id: "test", name: "Test Ticket", price: TEST_TICKET_PRICE, quote: "For testing payments only.", seats: "Testing",
   perks: ["Used to test Hubtel payments", "Not a real seat"], accent: "from-emerald-600 to-emerald-900" } as const;
 
 export const TIERS = [
@@ -43,18 +45,57 @@ const fmt = (n: number) => `GH₵ ${n.toLocaleString()}`;
 
 const Tickets = () => {
   const [params] = useSearchParams();
+  const location = useLocation();
+  const testMode = isTestTicketPage(location.pathname, location.search);
+  const tiers = testMode ? [TEST_TIER] : TIERS;
   const status = params.get("payment");
   const { toast } = useToast();
   const { trackEvent } = useAnalytics();
-  const [tier, setTier] = useState<string>("supporter");
+  const [tier, setTier] = useState<string>(testMode ? "test" : "supporter");
   const [qty, setQty] = useState(1);
   const [custom, setCustom] = useState("");
   const [form, setForm] = useState({ name: "", email: "", phone: "", organization: "", guests: "" });
   const [loading, setLoading] = useState(false);
 
-  const selected = TIERS.find((t) => t.id === tier)!;
+  const [paidTicket, setPaidTicket] = useState<PaidTicket | null>(null);
+  const [pdf, setPdf] = useState<Blob | null>(null);
+  const [checking, setChecking] = useState(false);
+  const [confirmation, setConfirmation] = useState("Payment confirmation pending.");
+  const [savedAccess] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("viva-ticket-checkout") || "null"); } catch { return null; }
+  });
+  const reference = params.get("reference") || savedAccess?.reference;
+  const access = params.get("access") || savedAccess?.access;
+  const selected = tiers.find((t) => t.id === tier) ?? tiers[0];
   const unit = tier === "legacy_partner" && Number(custom) > selected.price ? Math.round(Number(custom)) : selected.price;
   const total = unit * qty;
+
+  useEffect(() => { setTier(testMode ? "test" : "supporter"); setQty(1); }, [testMode]);
+
+  const checkPayment = async () => {
+    if (!reference || !access) { setConfirmation("No payment to check yet. Register and pay below."); return; }
+    setChecking(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ticket-status", { body: { reference, access } });
+      if (error || data?.error) throw new Error("Payment check unavailable");
+      if (data.status === "paid" && data.ticket) {
+        setPaidTicket(data.ticket);
+        setPdf(await createTicketPdf(data.ticket));
+        setConfirmation("Payment confirmed. Your ticket is ready.");
+      } else {
+        setConfirmation(data.status === "failed" ? "Payment was not completed. You can try again below." : "Waiting for Hubtel to confirm payment. Please check again shortly.");
+      }
+    } catch {
+      setConfirmation("Unable to confirm payment right now. Please check again shortly.");
+    } finally { setChecking(false); }
+  };
+
+  useEffect(() => {
+    if (!reference || !access || status === "cancelled") return;
+    void checkPayment();
+    const interval = window.setInterval(() => { void checkPayment(); }, 20000);
+    return () => window.clearInterval(interval);
+  }, [reference, access, status]);
 
   const choose = (id: string) => {
     setTier(id);
@@ -70,14 +111,16 @@ const Tickets = () => {
     }
     setLoading(true);
     try {
-      const clientReference = `ticket_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+      const clientReference = `ticket_${crypto.randomUUID().replace(/-/g, "").slice(0, 24)}`;
       const { data, error } = await supabase.functions.invoke("hubtel-initiate", {
         body: {
           totalAmount: total, clientReference, email: parsed.data.email, donorName: parsed.data.name, phone: parsed.data.phone,
           ticket: { tier, quantity: qty, customAmount: tier === "legacy_partner" ? unit : undefined, organization: form.organization, guestNames: form.guests },
+          returnOrigin: window.location.origin,
         },
       });
       if (error || !data?.checkoutUrl) throw new Error(data?.error || "Could not start payment");
+      if (data.accessToken) localStorage.setItem("viva-ticket-checkout", JSON.stringify({ reference: clientReference, access: data.accessToken }));
       trackEvent("ticket_checkout_opened", { tier, quantity: qty, amount: total });
       window.location.href = data.checkoutUrl;
     } catch (err) {
@@ -99,22 +142,25 @@ const Tickets = () => {
                 <PartyPopper className="w-4 h-4" /> #vivahealth@5
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-                5th Anniversary <span className="text-accent">Dinner Tickets</span>
+                {testMode ? "GH₵1 Test Ticket" : <>5th Anniversary <span className="text-accent">Dinner Tickets</span></>}
               </h1>
               <p className="text-lg text-primary-foreground/80">
-                Celebrating Excellence, Purpose, and Dedication. Reserve your seat and help us keep touching lives and widening smiles.
+                {testMode ? "Payment test only — not valid for event admission." : "Celebrating Excellence, Purpose, and Dedication. Reserve your seat and help us keep touching lives and widening smiles."}
               </p>
             </PageHero>
           </div>
         </section>
 
-        {status && (
+        {(status || reference) && (
           <div className="container mx-auto px-4 pt-10">
             <div className={`flex items-start gap-3 rounded-xl border p-5 ${status === "success" ? "border-primary bg-primary/5" : "border-destructive bg-destructive/5"}`}>
-              {status === "success" ? <CheckCircle2 className="w-6 h-6 text-primary shrink-0" /> : <XCircle className="w-6 h-6 text-destructive shrink-0" />}
+              {paidTicket ? <CheckCircle2 className="w-6 h-6 text-primary shrink-0" /> : status === "cancelled" ? <XCircle className="w-6 h-6 text-destructive shrink-0" /> : <Ticket className="w-6 h-6 text-primary shrink-0" />}
               <div>
-                <p className="font-semibold">{status === "success" ? "Thank you! Your ticket payment was received." : "Payment was cancelled."}</p>
-                <p className="text-sm text-muted-foreground">{status === "success" ? "Your registration is confirmed. Our team will contact you with event details." : "No money was taken. You can try again below."}</p>
+                <p className="font-semibold" role="status">{status === "cancelled" && !paidTicket ? "Checkout was cancelled. You can check payment status or try again." : confirmation}</p>
+                {paidTicket && <p className="text-sm text-muted-foreground mt-2">{paidTicket.full_name} · {fmt(paidTicket.amount_paid)} paid · {paidTicket.quantity} ticket(s)</p>}
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {pdf && paidTicket ? <Button onClick={() => void downloadTicket(pdf, `VivaHealth-ticket-${paidTicket.payment_reference}.pdf`)}><Download className="w-4 h-4 mr-2" />Download Ticket PDF</Button> : <Button disabled={checking || !reference || !access} onClick={() => void checkPayment()}>{checking && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}Check payment status</Button>}
+                </div>
               </div>
             </div>
           </div>
@@ -122,10 +168,11 @@ const Tickets = () => {
 
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">Ticket Categories</h2>
-            <p className="text-center text-muted-foreground mb-12">Choose the level that fits how you want to make an impact.</p>
+            {!testMode && <div className="flex justify-center mb-8"><Button variant="outline" asChild><Link to="/test-ticket"><FlaskConical className="w-4 h-4 mr-2" />GH₵1 Test Ticket</Link></Button></div>}
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">{testMode ? "Test Payment" : "Ticket Categories"}</h2>
+            <p className="text-center text-muted-foreground mb-12">{testMode ? "GH₵1 per test ticket" : "Choose the level that fits how you want to make an impact."}</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {TIERS.map((t, i) => (
+              {tiers.map((t, i) => (
                 <motion.div key={t.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                   className={`rounded-2xl overflow-hidden border bg-card shadow-sm flex flex-col ${tier === t.id ? "ring-2 ring-primary" : ""}`}>
                   <div className={`bg-gradient-to-br ${t.accent} p-6 text-primary-foreground`}>
@@ -146,9 +193,9 @@ const Tickets = () => {
                   </div>
                 </motion.div>
               ))}
-              <div className="rounded-2xl overflow-hidden border hidden lg:block">
+              {!testMode && <div className="rounded-2xl overflow-hidden border hidden lg:block">
                 <img src={ticketFlyer.url} alt="Ticket categories flyer" className="w-full h-full object-cover" loading="lazy" />
-              </div>
+              </div>}
             </div>
           </div>
         </section>
@@ -162,7 +209,7 @@ const Tickets = () => {
                 <div className="space-y-2">
                   <Label>Ticket category</Label>
                   <select value={tier} onChange={(e) => setTier(e.target.value)} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
-                    {TIERS.map((t) => <option key={t.id} value={t.id}>{t.name} — {fmt(t.price)}{t.id === "legacy_partner" ? "+" : ""}</option>)}
+                    {tiers.map((t) => <option key={t.id} value={t.id}>{t.name} — {fmt(t.price)}{t.id === "legacy_partner" ? "+" : ""}</option>)}
                   </select>
                 </div>
                 <div className="space-y-2">
@@ -177,11 +224,11 @@ const Tickets = () => {
                 </div>
               )}
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Full name *</Label><Input required maxLength={200} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-                <div className="space-y-2"><Label>Phone *</Label><Input required maxLength={30} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
+                <div className="space-y-2"><Label htmlFor="ticket-name">Full name *</Label><Input id="ticket-name" required maxLength={200} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+                <div className="space-y-2"><Label htmlFor="ticket-phone">Phone *</Label><Input id="ticket-phone" required maxLength={30} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Email *</Label><Input type="email" required maxLength={255} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+                <div className="space-y-2"><Label htmlFor="ticket-email">Email *</Label><Input id="ticket-email" type="email" required maxLength={255} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
                 <div className="space-y-2"><Label>Organization (optional)</Label><Input maxLength={200} value={form.organization} onChange={(e) => setForm({ ...form, organization: e.target.value })} /></div>
               </div>
               <div className="space-y-2">
