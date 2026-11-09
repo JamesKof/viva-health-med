@@ -229,6 +229,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ticket_registrations: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          guest_names: string | null
+          id: string
+          organization: string | null
+          payment_reference: string
+          payment_status: string
+          phone: string
+          quantity: number
+          tier: string
+          total_amount: number
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          guest_names?: string | null
+          id?: string
+          organization?: string | null
+          payment_reference: string
+          payment_status?: string
+          phone: string
+          quantity?: number
+          tier: string
+          total_amount: number
+          unit_price: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          guest_names?: string | null
+          id?: string
+          organization?: string | null
+          payment_reference?: string
+          payment_status?: string
+          phone?: string
+          quantity?: number
+          tier?: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

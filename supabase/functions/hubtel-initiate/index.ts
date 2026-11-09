@@ -41,7 +41,42 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { totalAmount, description, clientReference, email, donorName, phone } = await req.json();
+    const body = await req.json();
+    let { totalAmount, description } = body;
+    const { clientReference, email, donorName, phone, ticket } = body;
+
+    const TIERS: Record<string, { price: number; label: string }> = {
+      supporter: { price: 500, label: "Supporter" },
+      champion: { price: 1000, label: "Champion" },
+      impact_maker: { price: 2500, label: "Impact Maker" },
+      change_maker: { price: 5000, label: "Change Maker" },
+      legacy_partner: { price: 10000, label: "Legacy Partner" },
+    };
+    let ticketRow: Record<string, unknown> | null = null;
+    if (ticket) {
+      const tier = TIERS[ticket.tier];
+      const qty = Math.floor(Number(ticket.quantity));
+      const name = String(donorName || "").trim();
+      const ph = String(phone || "").trim();
+      if (!tier || !(qty >= 1 && qty <= 20) || name.length < 2 || name.length > 200 || ph.length < 7 || ph.length > 30 ||
+          !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email || ""))) {
+        return new Response(JSON.stringify({ error: "Invalid ticket details" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      let unit = tier.price;
+      if (ticket.tier === "legacy_partner" && Number(ticket.customAmount) > unit) {
+        unit = Math.min(Math.round(Number(ticket.customAmount)), 1000000);
+      }
+      totalAmount = unit * qty;
+      description = `5th Anniversary Dinner - ${tier.label} x${qty}`;
+      ticketRow = {
+        payment_reference: clientReference, tier: ticket.tier, quantity: qty, unit_price: unit,
+        total_amount: totalAmount, full_name: name, email, phone: ph,
+        organization: ticket.organization ? String(ticket.organization).slice(0, 200) : null,
+        guest_names: ticket.guestNames ? String(ticket.guestNames).slice(0, 1000) : null,
+      };
+    }
 
     if (!totalAmount || !email || !clientReference) {
       return new Response(JSON.stringify({ error: "Amount, email, and clientReference are required" }), {
@@ -63,7 +98,7 @@ Deno.serve(async (req) => {
       phone: phone || null,
       payment_reference: clientReference,
       payment_status: "pending",
-      donation_type: "one-time",
+      donation_type: ticketRow ? "ticket" : "one-time",
       currency: "GHS",
     });
 
@@ -75,10 +110,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (ticketRow) {
+      const { error: tErr } = await supabase.from("ticket_registrations").insert(ticketRow);
+      if (tErr) {
+        console.error("Failed to create ticket registration:", tErr);
+        return new Response(JSON.stringify({ error: "Failed to register ticket" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Prepare Hubtel API request
     const callbackUrl = `${supabaseUrl}/functions/v1/hubtel-callback`;
-    const returnUrl = "https://vivahealthmedfoundation.org/donate?payment=success";
-    const cancellationUrl = "https://vivahealthmedfoundation.org/donate?payment=cancelled";
+    const page = ticketRow ? "tickets" : "donate";
+    const returnUrl = `https://vivahealthmedfoundation.org/${page}?payment=success`;
+    const cancellationUrl = `https://vivahealthmedfoundation.org/${page}?payment=cancelled`;
 
     const hubtelPayload = {
       totalAmount,
