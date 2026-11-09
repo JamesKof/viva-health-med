@@ -1,3 +1,4 @@
+/// <reference types="bun" />
 import { test, expect } from "bun:test";
 import { TEST_TICKET_PRICE, isTestTicketPage } from "./ticket-pricing";
 test("test ticket costs exactly GH₵1", () => { expect(TEST_TICKET_PRICE).toBe(1); });
