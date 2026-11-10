@@ -28,8 +28,8 @@ const Index = () => {
         <Navbar />
         <StickySubNav />
         <Hero />
-        <TamaleAppealFeature />
         <FeatureCards />
+        <TamaleAppealFeature />
         <AboutSection />
         <ServicesSection />
         <TestimonialsSection />
