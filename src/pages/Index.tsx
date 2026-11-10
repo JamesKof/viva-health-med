@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { TamaleAppealFeature } from "@/components/TamaleAppealFeature";
 import { FeatureCards } from "@/components/FeatureCards";
 import { AboutSection } from "@/components/AboutSection";
 import { ServicesSection } from "@/components/ServicesSection";
@@ -27,6 +28,7 @@ const Index = () => {
         <Navbar />
         <StickySubNav />
         <Hero />
+        <TamaleAppealFeature />
         <FeatureCards />
         <AboutSection />
         <ServicesSection />

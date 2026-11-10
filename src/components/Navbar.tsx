@@ -34,6 +34,7 @@ const navItems = [
     to: "/volunteer",
     children: [
       { label: "Volunteer", to: VOLUNTEER_FORM_URL, external: true },
+      { label: "Tamale Surgical Appeal", to: "/tamale-appeal" },
       { label: "Donate Cash", to: "/volunteer" },
       { label: "Sponsorship", to: "/volunteer" },
       { label: "Publicity", to: "/volunteer" },
