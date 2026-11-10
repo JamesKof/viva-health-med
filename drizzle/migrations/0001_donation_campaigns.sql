@@ -1,0 +1,2 @@
+ALTER TABLE public.donations ADD COLUMN IF NOT EXISTS campaign text, ADD COLUMN IF NOT EXISTS is_anonymous boolean NOT NULL DEFAULT false, ADD COLUMN IF NOT EXISTS message text;
+CREATE INDEX IF NOT EXISTS donations_campaign_idx ON public.donations (campaign, payment_status);
