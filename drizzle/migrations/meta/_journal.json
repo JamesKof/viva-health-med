@@ -8,6 +8,13 @@
       "when": 1794259230067,
       "tag": "0000_create_ticket_registrations",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794295276231,
+      "tag": "0001_donation_campaigns",
+      "breakpoints": true
     }
   ]
 }

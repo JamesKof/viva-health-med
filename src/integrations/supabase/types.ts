@@ -17,6 +17,7 @@ export type Database = {
       donations: {
         Row: {
           amount: number
+          campaign: string | null
           created_at: string
           currency: string | null
           donation_type: string | null
@@ -24,6 +25,8 @@ export type Database = {
           email: string
           hubtel_invoice_id: string | null
           id: string
+          is_anonymous: boolean
+          message: string | null
           payment_reference: string
           payment_status: string | null
           phone: string | null
@@ -32,6 +35,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          campaign?: string | null
           created_at?: string
           currency?: string | null
           donation_type?: string | null
@@ -39,6 +43,8 @@ export type Database = {
           email: string
           hubtel_invoice_id?: string | null
           id?: string
+          is_anonymous?: boolean
+          message?: string | null
           payment_reference: string
           payment_status?: string | null
           phone?: string | null
@@ -47,6 +53,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          campaign?: string | null
           created_at?: string
           currency?: string | null
           donation_type?: string | null
@@ -54,6 +61,8 @@ export type Database = {
           email?: string
           hubtel_invoice_id?: string | null
           id?: string
+          is_anonymous?: boolean
+          message?: string | null
           payment_reference?: string
           payment_status?: string | null
           phone?: string | null
