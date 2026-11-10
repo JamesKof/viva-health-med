@@ -90,6 +90,16 @@ Deno.serve(async (req) => {
       });
     }
 
+    const isCampaign = !ticketRow && body.campaign === "tamale-2026";
+    if (isCampaign) {
+      const amt = Number(totalAmount);
+      if (!(amt >= 1 && amt <= 1000000)) {
+        return new Response(JSON.stringify({ error: "Invalid amount" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      totalAmount = Math.round(amt * 100) / 100;
+      description = "Tamale Free Surgical Outreach - Donation";
+    }
+
     console.log("Initiating Hubtel payment:", { totalAmount, email, clientReference, donorName });
 
     // Initialize Supabase client
@@ -105,6 +115,9 @@ Deno.serve(async (req) => {
       payment_status: "pending",
       donation_type: ticketRow ? "ticket" : "one-time",
       currency: "GHS",
+      campaign: isCampaign ? "tamale-2026" : null,
+      is_anonymous: isCampaign ? body.isAnonymous === true : false,
+      message: isCampaign && typeof body.message === "string" && body.message.trim() ? body.message.trim().slice(0, 280) : null,
     });
 
     if (insertError) {
@@ -127,7 +140,7 @@ Deno.serve(async (req) => {
 
     // Prepare Hubtel API request
     const callbackUrl = `${supabaseUrl}/functions/v1/hubtel-callback`;
-    const page = ticketRow ? "tickets" : "donate";
+    const page = ticketRow ? "tickets" : isCampaign ? "tamale-appeal" : "donate";
     const allowedOrigins = ["https://vivahealthmedfoundation.org", "https://viva-heal-renewal.lovable.app", "https://id-preview--d658694a-05d7-4618-a760-d907838b398d.lovable.app"];
     const origin = allowedOrigins.includes(returnOrigin) ? returnOrigin : allowedOrigins[0];
     const accessToken = ticketRow ? await ticketAccessToken(clientReference, hubtelApiKey) : undefined;
